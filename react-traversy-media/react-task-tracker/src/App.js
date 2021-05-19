@@ -27,6 +27,7 @@ const initialTasks = [
 
 function App() {
   const [tasks, setTasks] = useState(initialTasks);
+  const [showAddTask, setShowAddTask] = useState(false);
 
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
@@ -44,8 +45,9 @@ function App() {
 
   return (
     <div className="container">
-      <Header />
-      <AddTask onAdd={ addTask } />
+      <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
+      {/*Underneath is an alternative to the ternary expression when only one condition must be met*/}
+      {showAddTask && <AddTask onAdd={ addTask } />}      
       { tasks.length ? 
         (<Tasks 
           tasks={tasks}
