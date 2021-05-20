@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Tasks from './components/Tasks';
 import AddTask from './components/AddTask';
+import Footer from './components/Footer';
+import About from './components/About';
+
+
 
 // NOTE TO SELF: the command npm run build (or yarn build if using that) will create a build directory. That is the folder we deploy.
 // For local serving, you can install a package called 'serve' installed globally (npm -g i serve) then use the command serve -s build -p 8000 to see the artifact created.
@@ -77,19 +82,31 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
-      {/*Underneath is an alternative to the ternary expression when only one condition must be met*/}
-      {showAddTask && <AddTask onAdd={ addTask } />}      
-      { tasks.length ? 
-        (<Tasks 
-          tasks={tasks}
-          onDelete={deleteTask}
-          onToggle={toggleReminder}
-        />) : 
-        (<p>No pending tasks.</p>)
-      }
-    </div>
+    <Router>
+      <div className="container">
+        <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
+        <Route path="/" 
+          //the exact flag makes it so that it does not match the partial string. It must be exactly what the path sets it to be.
+          exact 
+          render={(props) => (
+            <>
+              {/*Underneath is an alternative to the ternary expression when only one condition must be met*/}
+              {showAddTask && <AddTask onAdd={ addTask } />}      
+              { tasks.length ? 
+                (<Tasks 
+                  tasks={tasks}
+                  onDelete={deleteTask}
+                  onToggle={toggleReminder}
+                />) : 
+                (<p>No pending tasks.</p>)
+              }
+            </>
+          )} 
+        />
+        <Route path="/about" component={About} />
+        <Footer />
+      </div>
+    </Router>    
   );
 }
 
